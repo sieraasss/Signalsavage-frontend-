@@ -1,0 +1,52 @@
+# Create GitHub-ready version of SignalSavage frontend with README
+github_repo_path = "/mnt/data/SignalSavage_GitHub_Repo"
+os.makedirs(github_repo_path, exist_ok=True)
+
+# Save frontend files
+with open(os.path.join(github_repo_path, "index.html"), "w") as f:
+    f.write(index_html)
+with open(os.path.join(github_repo_path, "styles.css"), "w") as f:
+    f.write(styles_css)
+with open(os.path.join(github_repo_path, "script.js"), "w") as f:
+    f.write(script_js)
+
+# Add README.md
+readme_md = """
+# SignalSavage Frontend
+
+This is the frontend interface for the SignalSavage crypto trading dashboard.
+
+## Features
+- Matrix-style login screen
+- Live dashboard UI
+- Embedded TradingView charts
+- Live crypto trade signals (connected to Flask backend)
+
+## Live Backend API
+Signals are fetched from:
+
+```
+https://signalsavage-backend.onrender.com/api/signals
+```
+
+## How to Deploy
+1. Upload this project to GitHub
+2. Connect the repo to [https://vercel.com](https://vercel.com)
+3. Vercel will auto-deploy the frontend and give you a public link
+
+Make sure the backend is deployed and available at the API URL above.
+"""
+
+with open(os.path.join(github_repo_path, "README.md"), "w") as f:
+    f.write(readme_md)
+
+# Zip the GitHub repo folder
+github_zip_path = "/mnt/data/SignalSavage_Frontend_GitHub.zip"
+with zipfile.ZipFile(github_zip_path, "w") as zipf:
+    for folder, _, files in os.walk(github_repo_path):
+        for file in files:
+            full_path = os.path.join(folder, file)
+            arcname = os.path.relpath(full_path, github_repo_path)
+            zipf.write(full_path, arcname)
+
+github_zip_path
